@@ -6,8 +6,8 @@ PImage dog;
 float q =0;
 float v = 0; 
 float r = 0;
-float opacity = 0;
-float fade = 1;
+float o = 0;
+float f = 1;
 
 void setup() {
   size (1080, 720);
@@ -39,11 +39,11 @@ void draw() {
       circle (x+100, y, 110);
       triangle (x-52, y+20, x+152, y+20, x+50, y+155);
       //looping text and making it fade in and out
-      fill(opacity);
+      fill(o,v,0);
       text ("Heart", x, y + 180);  
-      opacity= opacity+fade;
-      if (opacity> 255 || opacity< 0) {
-        fade= -fade;
+      o= o+f;
+      if (o> 255 || o< 0) {
+        f= -f;
       }
     }
   }
@@ -65,11 +65,23 @@ void mousePressed() {
   } else {
     v = 0;
   }
+}
+
+void keyPressed() {
+
   //image loop
-  for (int a = 10; a< height; a+=200) {
-    for (int b = 10; b< width; b+=300) {
-      if (mouseX < width/4 && mouseY < height/4 ) {
-        image (dog, b, a);
+  if (key == CODED) {
+    if (keyCode == UP) {
+      for (int a = 10; a< height; a+=200) {
+        for (int b = 10; b< width; b+=300) {
+          if (mouseX < width/4 && mouseY < height/4 ) {
+            tint(255);
+            image (dog, b, a);
+          } else {
+            tint(0);
+            image (dog, b, a);
+          }
+        }
       }
     }
   }
