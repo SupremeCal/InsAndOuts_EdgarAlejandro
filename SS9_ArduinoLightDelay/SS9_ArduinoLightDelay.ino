@@ -31,6 +31,14 @@ void loop() {
     delay(1000);
     digitalWrite(LED3, HIGH);// send voltage to LED pin
     delay(200);
+    digitalWrite(LED, LOW);
+    delay(1000);
+    digitalWrite(LED1, LOW);
+    delay(100);
+    digitalWrite(LED2, LOW);
+    delay(1000);
+    digitalWrite(LED3, LOW);// send voltage to LED pin
+    delay(200);
   } else {   //otherwise
     digitalWrite(LED, LOW);
     digitalWrite(LED1, LOW);
