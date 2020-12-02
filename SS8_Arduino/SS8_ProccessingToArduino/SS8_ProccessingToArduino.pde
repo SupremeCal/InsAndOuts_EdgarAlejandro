@@ -1,18 +1,9 @@
-///////////////////////////////////////////////////////
-/*
-DEMO: SENDING DATA FROM PROCESSING TO ARDUINO OVER SERIAL.
- Hover over text to send data to Serial.
- Pair with Arduino demo sketch to control LEDs.
- Note: Be sure to specify correct port number below!
- */
-///////////////////////////////////////////////////////
-
 
 import processing.serial.*;  //import Serial library
 
 Serial myPort;  // create object from Serial class
 
-int [] data= {0,1,2,3};
+int [] data= {0, 1, 2, 3};
 
 
 void setup() {
@@ -31,24 +22,30 @@ void setup() {
 }
 
 void draw() {
-  //text stuff
+  fill(200, 50, 0);
+  rect(0, 300, width, height/2);
+  fill(255, 255, 0);
+  text("Play Pattern", width/2, height/2+100);
 
-  //mouse location controls communication to Serial 
-  if (mouseY > width/2 && mouseY < height) {  
+  fill(255, 0, 30);
+  circle(width/2,height/2-100,150);
+  fill(255, 255, 0);
+  text("Click Here", width/2, height/2-100);
 
-    text("Pattern", width/2, height/2);
-     myPort.write(0); //send a 0
-     println ("0");
-     delay(500);
-     myPort.write(1); //send a 0
-     println ("1");
-     delay(500);
-     myPort.write(3); //send a 0
-     println ("3");
-     delay(500);
-     myPort.write(3); //send a 0
-     println ("2");
-     
+  
+  if (mouseY > width/2 && mouseY < height) {
+
+    myPort.write(0); //send a 0
+    println ("0");
+    delay(500);
+    myPort.write(1); //send a 0
+    println ("1");
+    delay(500);
+    myPort.write(3); //send a 0
+    println ("3");
+    delay(1000);
+    myPort.write(3); //send a 0
+    println ("2");
   } else if (mousePressed == true) { //if mouse is on left side of screen
     myPort.write(1);  //write '1' to Serial port
     println("1"); //also print '1' to console
