@@ -1,20 +1,29 @@
 import processing.serial.*; //import the Serial library
 Serial myPort;
 
+
+
+Enemy[] enemy = new Enemy[3];
+
+String state = "start";
+
 int x; // variable holding the value from A0
 int y; // variable holding the value from A1
 int b; // variable holding the value from digital pin 2
 int b2;
 
-int enemyPosX;
-int enemtposY;
-
 String portName;
 String val;
+
+player play = new player(x,y);
 
 void setup()
 {
   size ( 1024, 512 ) ; // window size
+
+  for (int i = 0; i < enemy.length; i++ ) {
+    enemy[i] = new Enemy(64);
+  }
 
   // we are opening the port
   myPort = new Serial(this, Serial.list()[2], 9600);
@@ -24,34 +33,55 @@ void setup()
 // drawing loop
 void draw()
 {
-  background(0, 0, 0) ; // set the fill color to black
-  clear() ; // clean the screen
+  //first state 
 
-  fill(255) ;
+  if (state=="start") {
+    background(0);
+    textAlign(CENTER);
+    fill(255);
+    textSize(32);
+    text("Spaceship", width/2, height/2);
+    textSize(16);
+    if (b == 1) // check if the button is pressed
+    {
+      state = "Game";
+    }
+  }  
+  //next state '
+  if (state=="Game") {
+    background(0, 0, 0) ; // set the fill color to black
+    clear() ; // clean the screen
 
-  if (b == 1) // check if the button is pressed
-  {
-    // draw a larger circle with specified coordinates
-    ellipse(x/2, y/2, 50, 50);
-    ellipse(x/2 +20, y/2, 10, 20);
-  } else
-  {
-    // we draw a circle with a certain coordinates
-    ellipse(x/2, y/2, 25, 25);
-  }
-  
-  if (b2 == 0) // check if the button is pressed
-  {
-    // draw a larger circle with specified coordinates
-    square(x/2, y/2, 20);
-  } else
-  {
-    // we draw a circle with a certain coordinates
-    ellipse(x/2, y/2, 25, 25);
-  }
-  
-  if(frameCount % 60 == 0 ){
-  enemy();
+    fill(255) ;
+
+    if (b == 1) // check if the button is pressed
+    {
+      // draw a larger circle with specified coordinates
+      play.display();
+      ellipse(x/2 +20, y/2, 10, 20);
+    } else
+    {
+      // we draw a circle with a certain coordinates
+
+      play.display();
+    }
+
+    if (b2 == 0) // check if the button is pressed
+    {
+      // Bullets for the level
+      square(x/2, y/2, 20);
+    } else
+    {
+      // we draw a circle with a certain coordinates
+      ellipse(x/2, y/2, 25, 25);
+    }
+    //enemySpawner 
+
+    for (int i = 0; i < enemy.length; i++) {
+      enemy[i].ascend();
+      enemy[i].display();
+      enemy[i].left();
+    }
   }
 }
 
@@ -76,12 +106,79 @@ void serialEvent( Serial myPort)
     b2 = vals[3];
   }
 }
+class Enemy {
+  float x;
+  float y; 
+  float diameter;
+  float xspeed;
 
-void enemy(){
-  fill(255);
-  ellipse(random(0,width),600,20,1);
+  Enemy(float pHolder) {
+    x = width;
+    y = random(height);
+    diameter = pHolder;
+    xspeed = random(0.5, 2.5);
+  }
+
+  void ascend() {
+    y = y + random(-2, 2);
+    x = x - xspeed;
+  }
+
+  void display() {
+    stroke(255);
+
+    ellipse(x, y, diameter, diameter);
+  }
+
+  void left() {
+    if (x<-diameter/2) {
+      y= height+diameter/2;
+    }
+  }
+}
+//bullet class 
+
+class Bullet {
+  float x;
+  float y;
+  float diameter; 
+  float xSpeed;
+
+  Bullet(float Holder) {
+    x = width;
+    y = height; 
+    diameter = Holder;
+    xSpeed = random(0.5, 2.5);
+  }
+
+  void shoot() {
+    y = y + random(-2, 2);
+    x = x - xSpeed;
+  }
+
+  void display() {
+    stroke(255);
+
+    ellipse(x, y, 30, diameter);
+  }
+
+  void left() {
+    if (x<-diameter/2) {
+      y= height+diameter/2;
+    }
+  }
 }
 
-void bullets (){
+//Player class 
 
+class player {
+
+  player(int x1, int y1) {
+    x = x1;
+    y = y1;
+
+  }
+  void display () {
+    ellipse(x/2, y/2, 25, 25);
+  }
 }
